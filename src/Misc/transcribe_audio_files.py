@@ -1,163 +1,111 @@
 import os
-import wave
+import time
 import azure.cognitiveservices.speech as speechsdk
+import scipy.io.wavfile as wavfile
 from pathlib import Path
-import json
-from sign_manage import check_signatures
+
+# Mapping of Azure speaker IDs to actual speaker names
+azure_to_name_mapping = {}
 
 
-def read_signatures(sign_json: Path = Path("data/sign.json")) -> (dict, dict):
-    """Read signature file mappings from a JSON file.
-
-    Args:
-        sign_json (Path): The path to the JSON file.
-    Returns:
-        tuple: A tuple containing two dictionaries -
-               paths (mapping of speaker names to file paths) and
-               maps (mapping of Azure-assigned speaker IDs to names).
-    """
-    check_signatures(sign_json)
-    if sign_json.exists():
-        with sign_json.open("r") as json_file:
-            raw_data = json.load(json_file)
-            paths = raw_data
-            maps = {
-                f"Guest-{i + 1}": name for i, (name, _) in enumerate(raw_data.items())
-            }
-        print(f"Debug: Signatures loaded - Paths: {paths}, Maps: {maps}")
-        return paths, maps
-    return {}, {}
-
-
-def combine_audio_files(paths, maps, audio_file) -> Path:
-    """Combine all audio files into a single file for diarization.
+def load_speaker_signatures(directory="data/signatures"):
+    """Load speaker audio files from the specified directory.
 
     Args:
-        paths: A dictionary mapping speaker names to their audio file paths.
-        maps: A dictionary mapping Azure-assigned speaker IDs to names.
+        directory (str): The path to the directory containing speaker audio files.
 
     Returns:
-        Path: The path to the combined audio file.
+        dict: A mapping of audio file paths to speaker names.
     """
-    combined_file_path = Path("data/combined_audio.wav")
-    with wave.open(str(combined_file_path), "wb") as combined_audio:
-        params_set = False
-        for i in range(len(maps)):
-            guest_key = f"Guest-{i + 1}"
-            audio_path = Path(paths[maps[guest_key]])
-            if audio_path.exists():
-                with wave.open(str(audio_path), "rb") as audio_segment:
-                    if not params_set:
-                        combined_audio.setparams(audio_segment.getparams())
-                        params_set = True
-                    combined_audio.writeframes(
-                        audio_segment.readframes(audio_segment.getnframes())
-                    )
-            else:
-                print(f"Warning: Audio file {audio_path} does not exist. Skipping.")
-        print(f"Debug: Combined audio created at {combined_file_path}")
-    return combined_file_path
+    speaker_mapping = {}
+    directory_path = Path(directory)
+
+    if not directory_path.exists():
+        raise FileNotFoundError(f"Directory {directory} does not exist.")
+
+    for file_path in directory_path.glob("*.wav"):
+        speaker_name = (
+            file_path.stem
+        )  # Use the file name (without extension) as the speaker name
+        speaker_mapping[str(file_path)] = speaker_name
+
+    print(f"Loaded speaker signatures: {speaker_mapping}")
+    return speaker_mapping
 
 
-def process_audio_file(speech_config, combined_audio_path, maps):
-    """Send the combined audio file for diarization and process results.
-
-    Args:
-        speech_config: The Azure speech configuration object.
-        combined_audio_path (Path): The path to the combined audio file.
-        maps: A dictionary mapping Azure-assigned speaker IDs to names.
-
-    Returns:
-        dict: A mapping of speaker IDs to their names after diarization.
-    """
-    if not combined_audio_path.exists():
-        print(f"Error: Combined audio file {combined_audio_path} does not exist.")
-        return {}
-
-    try:
-        # Create audio configuration for the combined file
-        audio_config = speechsdk.audio.AudioConfig(filename=str(combined_audio_path))
-
-        # Create a transcriber for diarization
-        conversation_transcriber = speechsdk.transcription.ConversationTranscriber(
-            speech_config=speech_config, audio_config=audio_config
-        )
-
-        speaker_map = {}
-
-        def diarization_handler(evt):
-            """Handle transcription events."""
-            print(f"Debug: Diarization event received - {evt}")
-            if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
-                speaker_id = evt.result.speaker_id
-                if speaker_id not in speaker_map:
-                    speaker_map[speaker_id] = f"Guest-{len(speaker_map) + 1}"
-                transcription_text = evt.result.text.strip()
-                if transcription_text:
-                    speaker_name = speaker_map[speaker_id]
-                    print(f"{speaker_name}: {transcription_text}")
-
-        conversation_transcriber.transcribed.connect(
-            lambda evt: diarization_handler(evt)
-        )
-        print("Info: Starting diarization for the combined audio file...")
-
-        # Start diarization and wait for completion
-        start_future = conversation_transcriber.start_transcribing_async()
-        start_future.get()  # Wait for transcription to start
-
-        print("Info: Diarization in progress...")
-
-        # Wait for transcription to complete
-        stop_future = conversation_transcriber.stop_transcribing_async()
-        stop_future.get()  # Wait for transcription to stop
-
-        print("Info: Diarization complete.")
-
-        print(f"Debug: Speaker Map: {speaker_map}")
-        return speaker_map
-
-    except Exception as e:
-        print(f"Error during diarization: {e}")
-        return {}
+def play_audio(file_path):
+    """Play a given audio file using sounddevice."""
+    fs, audio_data = wavfile.read(file_path)  # Read the audio file
+    print(f"Playing audio for {Path(file_path).stem}...")
 
 
-def main():
-    """Main entry point for the script."""
-    try:
-        # Read the speaker signature mappings
-        sign_file = Path("data/sign.json")
-        paths, maps = read_signatures(sign_file)
-
-        if not maps:
-            print("Error: No speaker signature mapping found in sign.json.")
-            return
-
-        # Initialize Azure Speech Configuration
-        speech_config = speechsdk.SpeechConfig(
-            subscription=os.environ.get("SPEECH_KEY"),
-            region=os.environ.get("SPEECH_REGION"),
-        )
-        speech_config.speech_recognition_language = "en-US"
-
-        # Combine all audio files into a single file
-        combined_audio_path = combine_audio_files(
-            paths, maps, audio_file="data/audio.wav"
-        )
-
-        # Perform diarization on the combined audio file
-        speaker_map = process_audio_file(speech_config, combined_audio_path, maps)
-
-        if speaker_map:
-            print("Diarization and transcription results:")
-            for speaker_id, speaker_name in speaker_map.items():
-                print(f"{speaker_id}: {speaker_name}")
+def conversation_transcriber_transcribed_cb(evt, speaker_mapping):
+    """Callback for handling transcription and speaker ID mapping."""
+    global azure_to_name_mapping
+    if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
+        speaker_id = evt.result.speaker_id
+        if speaker_id not in azure_to_name_mapping:
+            # If Azure's speaker ID is new, assign it to the next speaker name
+            if speaker_mapping:
+                actual_name = list(speaker_mapping.values()).pop(0)
+                azure_to_name_mapping[speaker_id] = actual_name
+                print(f"Assigned Azure's {speaker_id} to {actual_name}.")
         else:
-            print("No results found during diarization.")
+            actual_name = azure_to_name_mapping[speaker_id]
+        print(f"\n{actual_name}: {evt.result.text}\n")
+    elif evt.result.reason == speechsdk.ResultReason.NoMatch:
+        print("\nNo Match: Speech could not be transcribed.", end="", flush=True)
 
-    except Exception as err:
-        print(f"Critical Error: Encountered an exception: {err}")
+
+def recognize_from_microphone(speaker_mapping):
+    speech_config = speechsdk.SpeechConfig(
+        subscription=os.environ.get("SPEECH_KEY"),
+        region=os.environ.get("SPEECH_REGION"),
+    )
+    speech_config.speech_recognition_language = "en-US"
+
+    # Enable speaker diarization
+    speech_config.set_property(
+        property_id=speechsdk.PropertyId.SpeechServiceResponse_DiarizeIntermediateResults,
+        value="false",
+    )
+
+    # Use the microphone as the audio input
+    audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
+
+    # Create a conversation transcriber
+    conversation_transcriber = speechsdk.transcription.ConversationTranscriber(
+        speech_config=speech_config, audio_config=audio_config
+    )
+
+    # Bind the callback for transcription
+    conversation_transcriber.transcribed.connect(
+        lambda evt: conversation_transcriber_transcribed_cb(evt, speaker_mapping)
+    )
+
+    # Play pre-recorded audio to initialize speaker mapping
+    print("Playing audio files to identify speakers...")
+    for file_path in speaker_mapping:
+        play_audio(file_path)
+
+    # Start continuous transcription
+    conversation_transcriber.start_transcribing_async()
+    print("\nTranscriber Started. Speak into the mic.\n Press Ctrl+C to stop.")
+
+    try:
+        while True:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        print("Stopping transcription...")
+    conversation_transcriber.stop_transcribing_async()
 
 
+# Main entry point
 if __name__ == "__main__":
-    main()
+    try:
+        speaker_mapping = (
+            load_speaker_signatures()
+        )  # Load speaker audio from the signatures directory
+        recognize_from_microphone(speaker_mapping)
+    except Exception as err:
+        print(f"Encountered an exception: {err}")
