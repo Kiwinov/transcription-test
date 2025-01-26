@@ -23,13 +23,18 @@ dependencies:
   - zlib=1.2.13=h18a0788_1
   - pip:
       - azure-cognitiveservices-speech==1.42.0
+      - certifi==2024.12.14
       - cffi==1.17.1
+      - charset-normalizer==3.4.1
+      - idna==3.10
       - numpy==2.2.2
       - pycparser==2.22
       - pydub==0.25.1
+      - requests==2.32.3
       - scipy==1.15.1
       - simpleaudio==1.0.4
       - sounddevice==0.5.1
       - soundfile==0.13.0
+      - urllib3==2.3.0
       - wavio==0.0.9
 prefix: /opt/miniconda3/envs/speech

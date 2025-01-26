@@ -8,7 +8,7 @@ def conversation_transcriber_transcribed_cb(evt: speechsdk.SpeechRecognitionEven
     # After transcribing, give the result
     if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
         if evt.result.speaker_id:
-            print(f"\nSpeaker {evt.result.speaker_id}: {evt.result.text}")
+            print(f"\nSpeaker: {evt.result.speaker_id}: {evt.result.text}")
             print()
     elif evt.result.reason == speechsdk.ResultReason.NoMatch:
         print("\nNo Match: Speech could not be transcribed.", end="", flush=True)
