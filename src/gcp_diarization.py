@@ -34,14 +34,28 @@ config = speech.RecognitionConfig(
 print("Waiting for operation to complete...")
 response = client.recognize(config=config, audio=audio)
 
-# The transcript within each result is separate and sequential per result.
-# However, the words list within an alternative includes all the words
-# from all the results thus far. Thus, to get all the words with speaker
-# tags, you only have to take the words list from the last result:
+# Process the diarization results
 result = response.results[-1]
-
 words_info = result.alternatives[0].words
 
-# Printing out the output:
+# Group words by speaker
+speaker_transcriptions = {}
 for word_info in words_info:
-    print(f"word: '{word_info.word}', speaker_tag: {word_info.speaker_tag}")
+    speaker_tag = f"Speaker {word_info.speaker_tag}"
+    if speaker_tag not in speaker_transcriptions:
+        speaker_transcriptions[speaker_tag] = []
+    speaker_transcriptions[speaker_tag].append(word_info.word)
+
+# Create JSON structure
+final_output = []
+for speaker, words in speaker_transcriptions.items():
+    transcription = " ".join(words)
+    final_output.append({"speaker": speaker, "transcription": transcription})
+
+# Output as JSON
+output_file = "output/gcp_diarization_output.json"
+with open(output_file, "w") as f:
+    json.dump(final_output, f, indent=2)
+
+# Print the final JSON
+print(json.dumps(final_output, indent=2))

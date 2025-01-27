@@ -231,4 +231,7 @@ def parse_speaker_text(json_data, speaker_maps):
 
 
 if __name__ == "__main__":
-    convert_all_to_wav("data/signatures")
+    # convert_all_to_wav("data/signatures")
+    combine_audio(
+        ["data/audio/big_crowd.wav", "data/audio/heavy_crowd.wav"], "big_crowd"
+    )

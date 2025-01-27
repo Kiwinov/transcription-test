@@ -4,7 +4,7 @@ import json
 import utils
 
 # Define the path to the combined audio file
-audio_file = "data/audio/moderate_noise.wav"
+audio_file = "data/audio/big_crowd.wav"
 
 # Get environment variables
 SPEECH_REGION = os.getenv("SPEECH_REGION")
