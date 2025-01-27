@@ -173,7 +173,7 @@ def pre_processor(
     audio_path: str = "data/audio/",
     signatures_path: str = "data/signatures/",
     output: str = "combined_final",
-):
+) -> dict:
     """
     Combine all signature files and append the final audio file into a single .wav file
 
@@ -185,28 +185,27 @@ def pre_processor(
     """
 
     # Convert all audio files to .wav format
-    utils.convert_all_to_wav(audio_path)
-    utils.convert_all_to_wav(signatures_path)
+    convert_all_to_wav(audio_path)
+    convert_all_to_wav(signatures_path)
 
     # Combine all signature files into a single .wav file
     sign_files = sorted([str(sign) for sign in os.listdir(signatures_path)])
-    print(sign_files)
-    utils.combine_audio(["data/signatures/" + sign_file for sign_file in sign_files])
+    combine_audio(["data/signatures/" + sign_file for sign_file in sign_files])
 
     speaker_maps = dict()
 
     for i, sign_path in enumerate(sign_files):
         speaker = sign_path.split(".")[0]
-        speaker_maps[speaker] = int(i)
+        speaker_maps[int(i + 1)] = speaker.title()
 
     # Add the audio file that needs to be transcribed to combined audio
     combined_signs = ".build/combined_audio.wav"
-    utils.combine_audio([combined_signs, audio_file], output)
+    combine_audio([combined_signs, audio_file], output)
 
     return speaker_maps
 
 
-def parse_speaker_text(json_data):
+def parse_speaker_text(json_data, speaker_maps):
     """
     Parse the JSON response to extract speaker and text information.
 
@@ -224,8 +223,10 @@ def parse_speaker_text(json_data):
     for phrase in phrases:
         speaker = phrase.get("speaker", "Unknown")
         text = phrase.get("text", "")
-        parsed_output.append(f'Speaker: {speaker}\nText: "{text}"')
-
+        try:
+            parsed_output.append(f'Speaker: {speaker_maps[speaker]}\nText: "{text}"')
+        except KeyError:
+            parsed_output.append(f'Speaker: {speaker}\nText: "{text}"')
     return parsed_output
 
 
