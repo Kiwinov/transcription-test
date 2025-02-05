@@ -1,0 +1,200 @@
+Speaker: Prem
+Text: "A story of love and fear, of growth, discovery and acceptance that becomes a profound personal and philosophical."
+Offset: 0
+
+Speaker: Samarth
+Text: "Hello this is me."
+Offset: 0
+
+Speaker: Samarth
+Text: "This is a test for 10 seconds to."
+Offset: 0
+
+Speaker: Sarvesh
+Text: "Conclude The goal of auto decoders is to get a compressed and meaningful representation."
+Offset: 0
+
+Speaker: Sarvesh
+Text: "You would like to have a representation that is meaningful to us."
+Offset: 0
+
+Speaker: Srujan
+Text: "But as their role in society increases, so their potential problems become highlighted."
+Offset: 0
+
+Speaker: Varun
+Text: "Every few decades, an unknown author brings out a book of such depth, clarity, range."
+Offset: 0
+
+Speaker: Veeresh
+Text: "And of $60,000 I was like once few years and."
+Offset: 0
+
+Speaker: 7
+Text: "I also feel a lot of journaling things exist."
+
+Speaker: 7
+Text: "Yeah."
+
+Speaker: 7
+Text: "And like based on what I know from people, I think something like, 0I didn't know about this, but yeah, that will be more like you."
+
+Speaker: 7
+Text: "And then we can do this hard time, but like in podcast forms, like it'll read your memories, like with different voices or would just."
+
+Speaker: 8
+Text: "Hmm."
+
+Speaker: 7
+Text: "Yeah, like the one you talked about giving different things and just yeah."
+
+Speaker: 8
+Text: "In the."
+
+Speaker: 7
+Text: "So I think one thing like next step like tangible to try to make this deadline is made kind of like a rough timeline and you were to pick so first like you need to change the project."
+
+Speaker: 8
+Text: "Yeah."
+
+Speaker: 7
+Text: "Yeah, or like."
+
+Speaker: 8
+Text: "No, first, just to write your statement."
+
+Speaker: 7
+Text: "Yeah, first write your research statement."
+
+Speaker: 7
+Text: "That's going to."
+
+Speaker: 8
+Text: "And then research question."
+
+Speaker: 7
+Text: "Like I can."
+
+Speaker: 9
+Text: "Write research."
+
+Speaker: 7
+Text: "Ohh you mean like research statement?"
+
+Speaker: 8
+Text: "The big abstract goals, nobody like, nobody's even going to like check it."
+
+Speaker: 8
+Text: "That's it."
+
+Speaker: 8
+Text: "But it's just so you know that you are going along some direction that you care about."
+
+Speaker: 7
+Text: "Have this one doc that's just called research vision and it's like my like statement."
+
+Speaker: 8
+Text: "Yeah, especially like you said, you might want to do P."
+
+Speaker: 7
+Text: "You."
+
+Speaker: 8
+Text: "Said you you want to do PhD right?"
+
+Speaker: 8
+Text: "So then it's helpful to have this research statement."
+
+Speaker: 7
+Text: "Like with."
+
+Speaker: 8
+Text: "Just masters then it's fine, you can just do whatever you want."
+
+Speaker: 7
+Text: "Like it's literally just like."
+
+Speaker: 8
+Text: "Holy **** you have this?"
+
+Speaker: 7
+Text: "Well, this is because like if I run a lab later, I don't want to like explain what are the things we work."
+
+Speaker: 7
+Text: "I want to answer, yeah."
+
+Speaker: 7
+Text: "So it's like, what types of area like that you're specifically interested in?"
+
+Speaker: 7
+Text: "What type of contribution are you interested in?"
+
+Speaker: 7
+Text: "Like what are the keywords in your research?"
+
+Speaker: 7
+Text: "This would be really helpful for actually writing, we should say."
+
+Speaker: 7
+Text: "Yeah, I've actually have done this before."
+
+Speaker: 7
+Text: "No, nobody."
+
+Speaker: 8
+Text: "Does."
+
+Speaker: 7
+Text: "Nobody does this before."
+
+Speaker: 8
+Text: "Wrong."
+
+Speaker: 7
+Text: "Whatever."
+
+Speaker: 7
+Text: "But like right, you're like one liner, right."
+
+Speaker: 7
+Text: "And then so like these are like to do 's, right?"
+
+Speaker: 7
+Text: "It's like, right, you're one liner."
+
+Speaker: 7
+Text: "It can literally be one Google doc with like one sentence in it."
+
+Speaker: 7
+Text: "Just like I'm done."
+
+Speaker: 7
+Text: "Yeah, that's all I have for my research."
+
+Speaker: 7
+Text: "Entire research machine doc just memory memory."
+
+Speaker: 8
+Text: "Memory, yeah."
+
+Speaker: 7
+Text: "And then the second thing is make a product timeline and kind of like allocate which parts you want us to help on, right?"
+
+Speaker: 7
+Text: "I can send you a template for that like week by week, basically."
+
+Speaker: 7
+Text: "Not like more detailed than that."
+
+Speaker: 7
+Text: "But what I usually do to to start this project is I literally will outline a paper."
+
+Speaker: 7
+Text: "So I'm going to outline like exactly."
+
+Speaker: 7
+Text: "I think I'm reading the like literature review right now, though I'm kind of unsure what's there."
+
+Speaker: 7
+Text: "OK."
+

@@ -1,0 +1,210 @@
+Speaker: 7
+Text: "I mean, so talk it to you or if you like to start or."
+Offset: 43.2
+Duration: 7.0
+
+Speaker: 8
+Text: "People living on the mountains like some of these places that are."
+Offset: 51.96
+Duration: 4.96
+
+Speaker: 7
+Text: "But it seems that people have different it's, you know, yeah, both of themselves."
+Offset: 58.92
+Duration: 9.16
+
+Speaker: 7
+Text: "I mean, I think, yeah, true for themselves the most."
+Offset: 68.12
+Duration: 5.52
+
+Speaker: 7
+Text: "We just tell people how much fish like, you know, I don't want to eat fish anymore because I'm getting poison."
+Offset: 76.0
+Duration: 9.28
+
+Speaker: 7
+Text: "Where is for the jellyfish is that people might not think about it and environmental context as much."
+Offset: 88.84
+Duration: 7.16
+
+Speaker: 7
+Text: "So if you like, I'm learning more in that conversation than that."
+Offset: 96.0
+Duration: 3.2
+
+Speaker: 7
+Text: "It's like, it's like maybe."
+Offset: 102.0
+Duration: 5.44
+
+Speaker: 9
+Text: "Yeah, you might find some useful information in looking at marketing literature for persuasion and effective strategies."
+Offset: 112.2
+Duration: 9.32
+
+Speaker: 9
+Text: "I believe there's a best literature there's down what you look for, but you know, that's what advertising is all about and political campaigns and strategies and you know, there may be things that you can not from that that would be useful I."
+Offset: 122.72
+Duration: 16.16
+
+Speaker: 7
+Text: "Mean the people is largely the science."
+Offset: 139.72
+Duration: 2.12
+
+Speaker: 8
+Text: "Should I show it?"
+Offset: 147.28
+Duration: 0.6
+
+Speaker: 10
+Text: "Yeah."
+Offset: 149.32
+Duration: 0.28
+
+Speaker: 7
+Text: "Related to to your common Gen, the people from L'Oreal that are funding this, I mean they, they are from marketing."
+Offset: 150.88
+Duration: 9.32
+
+Speaker: 7
+Text: "So, yeah, yeah."
+Offset: 160.28
+Duration: 1.6
+
+Speaker: 8
+Text: "Yeah."
+Offset: 164.24
+Duration: 0.12
+
+Speaker: 9
+Text: "So maybe, but maybe there are stories of information as well."
+Offset: 164.68
+Duration: 3.44
+
+Speaker: 7
+Text: "Yeah, yeah."
+Offset: 168.12
+Duration: 1.16
+
+Speaker: 9
+Text: "Yeah, their feedback and in the experimental design there might be."
+Offset: 169.28
+Duration: 5.4
+
+Speaker: 7
+Text: "So."
+Offset: 175.64
+Duration: 0.16
+
+Speaker: 8
+Text: "Stop there."
+Offset: 176.92
+Duration: 2.84
+
+Speaker: 10
+Text: "Definitely."
+Offset: 182.12
+Duration: 0.52
+
+Speaker: 10
+Text: "That's this, yeah."
+Offset: 182.96
+Duration: 2.56
+
+Speaker: 10
+Text: "So you got difference of strategies to convince people of private change on the left."
+Offset: 185.56
+Duration: 6.28
+
+Speaker: 10
+Text: "These are different strategies like, you know, like scientific consensus, like using negative emotion, realistic ignorance, like 7 people that actually not people have."
+Offset: 191.84
+Duration: 15.64
+
+Speaker: 10
+Text: "So I think in in the in the next time we're doing like you try to see if when we use the AI, we will keep the strategy with AI that's actually, you know, convince people much better than this sort of static intervention with strategies, because this paper only look at the strategies in sort of a static or passive way, right."
+Offset: 209.44
+Duration: 26.72
+
+Speaker: 10
+Text: "But at the same time, I think the question that we are also thinking about is like, well, maybe the AI could be more effective, but there's also like environmental cost when you're running the inference or when we generated what messages, what message."
+Offset: 237.48
+Duration: 14.08
+
+Speaker: 10
+Text: "Yeah, right."
+Offset: 251.76
+Duration: 0.52
+
+Speaker: 10
+Text: "So what is the what is the fail of?"
+Offset: 252.28
+Duration: 2.44
+
+Speaker: 10
+Text: "Like AI could be 5% effective, but if you also talk more environment, it could also like have more."
+Offset: 254.72
+Duration: 7.08
+
+Speaker: 10
+Text: "They can have an environment."
+Offset: 262.16
+Duration: 1.48
+
+Speaker: 10
+Text: "How do we battle stuff?"
+Offset: 264.04
+Duration: 1.0
+
+Speaker: 10
+Text: "Yeah, well."
+Offset: 265.4
+Duration: 2.6
+
+Speaker: 7
+Text: "Very exciting direction to see a spine great strategy."
+Offset: 272.36
+Duration: 7.04
+
+Speaker: 7
+Text: "So that really story this and the masses do that's something fact."
+Offset: 279.4
+Duration: 5.36
+
+Speaker: 8
+Text: "Question."
+Offset: 286.44
+Duration: 0.56
+
+Speaker: 8
+Text: "It's like, what is our group stands on persuasion like?"
+Offset: 287.08
+Duration: 4.16
+
+Speaker: 7
+Text: "Yeah, it's."
+Offset: 292.08
+Duration: 0.8
+
+Speaker: 8
+Text: "Yeah, because like we had in the decision making group, we had like a talk about, you know, whether we should value like who gets to define what is like the best thing and people should just be persuaded by AI or, and I don't know, like you could say it's charitable, it's good that people think about climate change."
+Offset: 293.92
+Duration: 20.88
+
+Speaker: 8
+Text: "But is there a way to work with persuasion in this domain where it's like, it's not just, we just assume that you have no idea of like, what's the best for you, and then we impose that way due to like."
+Offset: 314.8
+Duration: 13.6
+
+Speaker: 7
+Text: "That's one question."
+Offset: 329.6
+Duration: 1.92
+
+Speaker: 7
+Text: "I think another, possibly even bigger one, is whatever methods we come up with persuade."
+Offset: 332.16
+Duration: 6.08
+

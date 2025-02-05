@@ -8,13 +8,15 @@ import os
 import subprocess
 import soundfile as sf
 from typing import List
+import asyncio
+import json
 
 
 sign_dir = "data/signatures/"  # Directory to save audio signatures
 
 
 # Function to record audio
-def record_audio(filename: str, duration: int):
+async def record_audio(filename: str, duration: int):
     """
     Records audio and saves it in 16-bit, 16-kHz, mono format.
 
@@ -26,7 +28,7 @@ def record_audio(filename: str, duration: int):
     sample_rate = 16000  # 16 kHz
     channels = 1  # Mono
 
-    print("Speak into the mic for 10 seconds:")
+    print(f"Speak into the mic for {duration} seconds:")
     # Record audio data
     audio_data = sd.rec(
         int(duration * sample_rate),
@@ -46,7 +48,7 @@ def record_audio(filename: str, duration: int):
 
 
 # Function to record and save signature audio file
-def sign(user: str, dur: int = 5):
+async def sign(user: str, dur: int = 4):
     """
     Record and save audio as "<user>.wav"
 
@@ -60,7 +62,8 @@ def sign(user: str, dur: int = 5):
     print(f"Audio signature saved as {user.lower()}.wav in {sign_dir}")
 
 
-def convert_to_wav(
+# Convert audio file to wav format
+async def convert_to_wav(
     file_path: str, target_sample_rate: str = "16000", target_channels: str = "1"
 ):
     """
@@ -70,36 +73,28 @@ def convert_to_wav(
         file_path (str): The path to the audio file to convert.
     """
     try:
-        # Define the output path
         output_path = str(Path(file_path).with_suffix(".wav"))
-
-        # Use ffmpeg to preprocess and convert the file
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-i",
-                file_path,
-                "-ar",
-                target_sample_rate,
-                "-ac",
-                target_channels,
-                output_path,
-            ],
-            check=True,
-            stdout=subprocess.DEVNULL,  # Suppress stdout
-            stderr=subprocess.DEVNULL,  # Suppress stderr
+        process = asyncio.create_subprocess_exec(
+            "ffmpeg",
+            "-i",
+            file_path,
+            "-ar",
+            target_sample_rate,
+            "-ac",
+            target_channels,
+            output_path,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
-        print(f"Converted {file_path} to {output_path} with 16000Hz, 1 channel.")
-
-        # Delete the original file
+        process.communicate()
         Path(file_path).unlink()
-        print(f"Deleted the original file: {file_path}")
     except subprocess.CalledProcessError as e:
         print(f"Error converting {file_path} to .wav using ffmpeg: {e}")
 
 
-def convert_all_to_wav(
-    audio_path: str = "data/audio/",
+# Convert all audio files in a directory to wav format
+async def convert_all_to_wav(
+    audio_path: str = "known_speakers/audio_files",
 ):
     """
     Convert all audio files in a directory to .wav format with specified configurations.
@@ -115,16 +110,26 @@ def convert_all_to_wav(
     # Iterate over all files in the directory
     for audio_file in Path(audio_path).glob("*"):
         if audio_file.suffix in audio_formats:
-            convert_to_wav(str(audio_file))
+            await convert_to_wav(str(audio_file))
         elif audio_file.suffix != ".wav":
             # Delete non-wav audio files
             Path(audio_file).unlink()
             print(f"Deleted non-wav file: {audio_file}")
 
 
-def combine_audio(
+async def combine_audio(
     audio_file_paths: List[str], output_name: str = "combined_audio"
 ) -> str:
+    """
+    Combine multiple audio files into a single audio file.
+
+    Args:
+        audio_file_paths (List[str]): List of paths to the audio files to combine.
+        output_name (str): Name of the output audio file.
+
+    Returns:
+        str: Path to the combined audio file.
+    """
     if not audio_file_paths:
         raise ValueError("No audio files provided.")
 
@@ -168,44 +173,86 @@ def combine_audio(
     return combined_file_path
 
 
-def pre_processor(
+import json
+import os
+
+
+async def speaker_map_processor(
     audio_file: str,
-    audio_path: str = "data/audio/",
-    signatures_path: str = "data/signatures/",
-    output: str = "combined_final",
-) -> dict:
+    signatures_path: str = "known_speakers/audio_files/",
+    speakers_json: str = "known_speakers/speaker_maps.json",
+    output: str = "combined_audio",
+) -> (dict, str):
     """
-    Combine all signature files and append the final audio file into a single .wav file
+    Combine all signature files and append the final audio buffer into a single .wav file.
+    The audio buffer is first converted to .wav before concatenation.
 
     Args:
-        audio_path (str): Path to the directory containing the audio files
+        audio_file (str): Path to the input audio file
         signatures_path (str): Path to signatures directory
+        speakers_json (str): Path to the speaker maps JSON file
         output (str): Name of the output .wav file
-        audio_file (str): Name of the audio file to be appended
+
+    Returns:
+        dict: A dictionary mapping speaker IDs to speaker names
+        str: Path to the combined audio file
     """
+    # Path to the combined signature file
+    combined_signs_path = ".build/combined_signs.wav"
 
-    # Convert all audio files to .wav format
-    convert_all_to_wav(audio_path)
-    convert_all_to_wav(signatures_path)
+    # Check if the speaker maps already exist and are up to date
+    recreate_maps = True
+    if os.path.exists(speakers_json):
+        try:
+            with open(speakers_json, "r") as f:
+                speaker_maps = json.load(f)
+                if (
+                    isinstance(speaker_maps, dict)
+                    and len(speaker_maps) == len(os.listdir(signatures_path))
+                    and os.path.exists(combined_signs_path)
+                ):
+                    print("Speaker maps already exist.")
+                    recreate_maps = False
+                else:
+                    print(
+                        "Speaker maps are outdated or invalid. Recreating speaker maps."
+                    )
+        except (json.JSONDecodeError, ValueError):
+            print("Speaker maps file is corrupted. Recreating speaker maps.")
+    else:
+        print("Speaker maps do not exist. Creating speaker maps.")
 
-    # Combine all signature files into a single .wav file
-    sign_files = sorted([str(sign) for sign in os.listdir(signatures_path)])
-    combine_audio(["data/signatures/" + sign_file for sign_file in sign_files])
+    if recreate_maps:
+        # Convert all signature files to WAV format (if needed)
+        await convert_all_to_wav(signatures_path)
 
-    speaker_maps = dict()
+        # Get sorted list of signature files
+        sign_files = sorted(os.listdir(signatures_path))
 
-    for i, sign_path in enumerate(sign_files):
-        speaker = sign_path.split(".")[0]
-        speaker_maps[int(i + 1)] = speaker.title()
+        # Combine all signature files into one audio array using combine_audio
+        await combine_audio(
+            [os.path.join(signatures_path, sign_file) for sign_file in sign_files],
+            output_name="combined_signs",
+        )
 
-    # Add the audio file that needs to be transcribed to combined audio
-    combined_signs = ".build/combined_audio.wav"
-    combine_audio([combined_signs, audio_file], output)
+        # Create a speaker map
+        speaker_maps = {
+            i + 1: os.path.splitext(sign_file)[0].title()
+            for i, sign_file in enumerate(sign_files)
+        }
 
-    return speaker_maps
+        # Save the updated speaker map
+        with open(speakers_json, "w") as f:
+            json.dump(speaker_maps, f, indent=4)
+
+    # Use the combine_audio function to combine the signature files and the audio buffer
+    await combine_audio([combined_signs_path, audio_file], output_name=output)
+    final_output_path = f".build/{output}.wav"
+
+    return speaker_maps, final_output_path
 
 
-def parse_speaker_text(json_data, speaker_maps):
+async def parse_speaker_text(json_data, speaker_maps):
     """
     Parse the JSON response to extract speaker and text information.
 
@@ -223,15 +270,40 @@ def parse_speaker_text(json_data, speaker_maps):
     for phrase in phrases:
         speaker = phrase.get("speaker", "Unknown")
         text = phrase.get("text", "")
+        offset = phrase.get("offsetMilliseconds", 0)
+        duration = phrase.get("durationMilliseconds", 0)
         try:
-            parsed_output.append(f'Speaker: {speaker_maps[speaker]}\nText: "{text}"')
+            parsed_output.append(
+                f'Speaker: {speaker_maps[str(speaker)]}\nText: "{text}"\nOffset: {offset/1000}\nDuration: {duration/1000}'
+            )
         except KeyError:
-            parsed_output.append(f'Speaker: {speaker}\nText: "{text}"')
+            parsed_output.append(
+                f'Speaker: {speaker}\nText: "{text}"\nOffset: {offset/1000}\nDuration: {duration/1000}'
+            )
     return parsed_output
 
 
+async def get_wav_duration(file_path):
+    """
+    Returns the duration in seconds of a WAV file.
+
+    :param file_path: Path to the WAV file
+    :return: Duration in seconds (float)
+    """
+    with wave.open(file_path, "r") as wav_file:
+        frames = wav_file.getnframes()
+        rate = wav_file.getframerate()
+        duration = frames / float(rate)
+    return duration
+
+
 if __name__ == "__main__":
-    # convert_all_to_wav("data/signatures")
-    combine_audio(
-        ["data/audio/big_crowd.wav", "data/audio/heavy_crowd.wav"], "big_crowd"
-    )
+    # convert_all_to_wav(
+    #     "/Users/sam/Desktop/Projects/GitHub Hosted/memoro/server/known_speakers/audio_files"
+    # )
+    # combine_audio(
+    #     ["audio/big_crowd.wav", "audio/heavy_crowd.wav"], "big_crowd"
+    # )
+
+    # asyncio.run(record_audio("audio/test.wav", 5))
+    print(asyncio.run(get_wav_duration(".build/combined_signs.wav")))

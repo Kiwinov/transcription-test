@@ -1,0 +1,60 @@
+Speaker: 1
+Text: "A story of love and fear, of growth, discovery and acceptance that becomes a profound personal and philosophical."
+
+Speaker: 2
+Text: "Hello this is me."
+
+Speaker: 2
+Text: "This is a test for 10 seconds to."
+
+Speaker: 3
+Text: "Conclude The goal of auto decoders is to get a compressed and meaningful representation."
+
+Speaker: 3
+Text: "You would like to have a representation that is meaningful to us."
+
+Speaker: 4
+Text: "But as their role in society increases, so their potential problems become highlighted."
+
+Speaker: 5
+Text: "Every few decades, an unknown author brings out a book of such depth, clarity, range."
+
+Speaker: 6
+Text: "And of $60,000 I was at once few years and."
+
+Speaker: 3
+Text: "Yes."
+
+Speaker: 3
+Text: "To conclude, the goal of auto decoders is to get a compressed and meaningful representation."
+
+Speaker: 3
+Text: "We would like to have a representation that is meaningful to us and at the same time good for reconstruction."
+
+Speaker: 3
+Text: "In that period of it is important to find the architectures which serves all needs."
+
+Speaker: 1
+Text: "A story of love and fear, of growth, discovery and acceptance that becomes a profound personal and philosophical odyssey into life's fundamental questions."
+
+Speaker: 4
+Text: "Algorithms can display remarkable performance, but as their role in society increases, so their potential problems become highlighted."
+
+Speaker: 4
+Text: "4 main concerns can be identified."
+
+Speaker: 4
+Text: "Lack of robustness, not accounting for statistical variability, implicit bias and lack of transparency change with different treatments, but care is required in analysing the outcomes of women given these treatments in the past."
+
+Speaker: 6
+Text: "And my first customer to unload one of his mistakes he had saved himself and of firm $60,000."
+
+Speaker: 6
+Text: "There was that once few years and but that didn't solve the problem."
+
+Speaker: 2
+Text: "Every few decades, an unknown author brings out a book of such depth, clarity, range, wit, beauty, and originality that it is recognized at once as a major literary event."
+
+Speaker: 2
+Text: "Martin Garner in the Scientific American."
+
